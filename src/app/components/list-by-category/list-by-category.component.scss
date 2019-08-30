@@ -1,0 +1,79 @@
+.scroll {
+    height: 500px
+}
+
+ul {
+    color: #333;
+}
+
+.book-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 5px;
+}
+
+.searchDiv {
+    display: grid;
+    height: 30px;
+    margin: 10px;
+    background-color: blue;
+}
+
+.authorName {
+    font-size: 10px;
+}
+
+.bookTitle {
+    font-size: 15px;
+}
+
+li,
+.list {
+    display: inline;
+}
+
+.cat-type {
+    margin: auto 10px;
+}
+
+.tn {
+    margin: 6px 6px;
+    border: 4px solid #eee;
+    box-shadow: #555 1px 1px 8px 1px;
+    cursor: pointer;
+}
+
+.image-div {
+    height: 256px;
+}
+
+
+/* 
+    ##Device = Tablets, Ipads (portrait)
+    ##Screen = B/w 768px to 1024px
+  */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .book-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 10px;
+        padding: 5px;
+    }
+}
+
+
+/* 
+    ##Device = Most of the Smartphones Mobiles (Portrait)
+    ##Screen = B/w 320px to 479px
+  */
+
+@media (min-width: 320px) and (max-width: 480px) {
+    .book-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 10px;
+        padding: 5px;
+    }
+}

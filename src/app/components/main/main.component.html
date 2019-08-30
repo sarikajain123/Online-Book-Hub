@@ -1,0 +1,13 @@
+<div class="mainDiv">
+    <div class="titleDiv">
+        <h2>Book Hub Project</h2>
+    </div>
+    <div class="listDiv">
+        <li class="category" *ngFor="let cat of categories" (click)="onSelect(cat)">
+            <span class="catName">{{cat}}</span>
+            <span>
+            <img style="float:right" src="./../../../assets/drawable-hdpi/ic_right_arrow.png" alt="">
+           </span>
+        </li>
+    </div>
+</div>

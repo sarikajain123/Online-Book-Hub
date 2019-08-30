@@ -1,0 +1,23 @@
+<div class="searchDiv">
+    <input type="text" name="search" [(ngModel)]="searchText" (keyup.enter)="searchBook()" autocomplete="off" placeholder="Search book or author">
+</div>
+<div class="cat-type">{{catType}}</div>
+<div *ngIf="loading">
+    <h5>Loading...</h5>
+</div>
+<ul *ngIf="!loading" class="list">
+    <cdk-virtual-scroll-viewport class="scroll" itemSize="50" (scroll)="onScroll($event)">
+        <div *ngIf="booksByCat" class="book-container">
+            <div *cdkVirtualFor="let book of booksByCat.results">
+                <li *ngIf="book" (click)="openBook(book)">
+                    <div class="image-div">
+                        <img src="{{book.formats['image/jpeg']}}" width="200" height="230" class="tn" alt="BookCover" onerror="this.src='./../../../assets/defaultBook.jpg';">
+                    </div>
+                    <div class="bookTitle">{{book.title}} </div>
+                    <div *ngIf="book.authors[0].name" class="authorName">{{book.authors[0].name}}</div>
+                </li>
+            </div>
+        </div>
+
+    </cdk-virtual-scroll-viewport>
+</ul>

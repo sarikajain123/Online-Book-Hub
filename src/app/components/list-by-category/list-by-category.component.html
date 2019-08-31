@@ -3,10 +3,11 @@
 </div>
 <div class="cat-type">{{catType}}</div>
 <div *ngIf="loading">
-    <h5>Loading...</h5>
+    <ng4-loading-spinner> </ng4-loading-spinner>
 </div>
+
 <ul *ngIf="!loading" class="list">
-    <cdk-virtual-scroll-viewport class="scroll" itemSize="50" (scroll)="onScroll($event)">
+    <cdk-virtual-scroll-viewport class="scroll" itemSize="100" (scroll)="onScroll($event)">
         <div *ngIf="booksByCat" class="book-container">
             <div *cdkVirtualFor="let book of booksByCat.results">
                 <li *ngIf="book" (click)="openBook(book)">
@@ -16,6 +17,9 @@
                     <div class="bookTitle">{{book.title}} </div>
                     <div *ngIf="book.authors[0].name" class="authorName">{{book.authors[0].name}}</div>
                 </li>
+            </div>
+            <div *ngIf="loadingDataOnScrolling">
+                <ng4-loading-spinner> </ng4-loading-spinner>
             </div>
         </div>
 

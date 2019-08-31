@@ -8,7 +8,7 @@ import { ListByCategoryComponent } from './components/list-by-category/list-by-c
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { MainComponent } from './components/main/main.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +21,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     AppRoutingModule,
     HttpClientModule,
     ScrollingModule,
-    FormsModule
+    FormsModule,
+    Ng4LoadingSpinnerModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,6 +1,7 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpService } from 'src/app/services/http.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-list-by-category',
@@ -15,9 +16,10 @@ export class ListByCategoryComponent implements OnInit {
   booksByCat: any;
   allBooks: any;
   tempAllBooks: any;
-  loading: boolean =true;
+  loading: boolean = true;
+  loadingDataOnScrolling: boolean = false;
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private httpservice: HttpService) {
+  constructor(private spinnerService: Ng4LoadingSpinnerService, private activeRoute: ActivatedRoute, private httpservice: HttpService) {
   }
 
   ngOnInit() {
@@ -26,6 +28,7 @@ export class ListByCategoryComponent implements OnInit {
       .subscribe(params => {
         this.catType = params.data;
       });
+    this.spinnerService.show();
     this.getBooksByCategory(this.catType);
   }
 
@@ -34,34 +37,36 @@ export class ListByCategoryComponent implements OnInit {
     const requestUrl = `books/?mime_type=image&topic=${category}`;
     this.httpservice.get_Data(requestUrl).subscribe(data => {
       this.booksByCat = data;
-      this.loading = false;
+      this.loading = false
+      this.spinnerService.hide();
       this.tempAllBooks = data;
 
     });
   }
 
   searchBook() {
-    if(this.searchText.length > 0 && this.searchText.trim() === ''){
+    if (this.searchText.length > 0 && this.searchText.trim() === '') {
       this.booksByCat = this.tempAllBooks;
-    } else{
+    } else {
       const requestUrl = `books/?search=${this.searchText}&topic=${this.catType}&mime_type=image`
-      this.loading = true;
+      this.spinnerService.show();
       /* search using API*/
       this.httpservice.get_Data(requestUrl).subscribe(data => {
         this.booksByCat = data;
-        this.loading = false;
+        this.spinnerService.hide();
         return 0;
       });
     }
   }
-      //## To search in the list without Api call
-      /* 
-        this.booksByCat=this.tempAllBooks;
-      this.booksByCat = this.booksByCat.results.filter((item) => {
-        return (item.title.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1 ||item.authors[0].name.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
-      }); */
 
-  
+  /* 
+   //## To search in the list without Api call
+    this.booksByCat=this.tempAllBooks;
+  this.booksByCat = this.booksByCat.results.filter((item) => {
+    return (item.title.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1 ||item.authors[0].name.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
+  }); */
+
+
   openBook(book) {
     const matchFormatHTML = [];
     const matchFormatPdf = [];
@@ -92,24 +97,32 @@ export class ListByCategoryComponent implements OnInit {
     }
   }
 
-  getAllBooks() {
-    const requestUrl = 'books/';
-    this.httpservice.get_Data(requestUrl).subscribe(data => {
-      this.allBooks = data.results;
-    });
-  }
   onScroll(event: any) {
     // detect bottom og scroll
     // visible height + pixel scrolled >= total height 
     if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight) {
-      let requestUrl = this.tempAllBooks.next;
+      this.loadingDataOnScrolling = true;
+      this.spinnerService.show();
+      let requestUrl = this.booksByCat.next;
+
       requestUrl = requestUrl.split('8000/');
       this.httpservice.get_Data(requestUrl[1]).subscribe(data => {
-
-    });
+        this.booksByCat.results = this.booksByCat.results.concat(data.results);
+        this.booksByCat.next = data.next;
+        // this.booksByCat.pre= data.pre;
+        this.loadingDataOnScrolling = false;
+        this.spinnerService.hide();
+        return 1;
+      });
     }
   }
 }
 
 
-    
+/*
+ getAllBooks() {
+   const requestUrl = 'books/';
+   this.httpservice.get_Data(requestUrl).subscribe(data => {
+     this.allBooks = data.results;
+   });
+ } */
